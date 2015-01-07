@@ -91,4 +91,20 @@ class ChainAuthenticationProvider implements UserProviderInterface
     {
         return $this->delegator->resolver()->get('ip')->authenticate();
     }
+
+    /**
+    * Needed by Laravel 4.1.26 and above
+    */
+    public function retrieveByToken($identifier, $token)
+    {
+        return new \Exception('not implemented');
+    }
+
+    /**
+    * Needed by Laravel 4.1.26 and above
+    */
+    public function updateRememberToken(UserInterface $user, $token)
+    {
+        return new \Exception('not implemented');
+    } 
 }
