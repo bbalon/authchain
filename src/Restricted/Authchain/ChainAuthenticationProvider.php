@@ -45,7 +45,9 @@ class ChainAuthenticationProvider implements UserProviderInterface
      */
     public function retrieveByCredentials(array $credentials)
     {
-        if ($user = $this->delegator->provider($credentials)->authenticate() and $this->validateCredentials($user, $credentials)) {
+        $identifier = Loader::username();
+        $username = $credentials(Loader::username());
+        if ($user = $this->delegator->native()->findBy($identifier, $username)) {
             return $user;
         }
 
@@ -59,11 +61,15 @@ class ChainAuthenticationProvider implements UserProviderInterface
     {
         $plain = $credentials[Loader::password()];
 
-        if (!Hash::check($plain, $user->getAuthPassword())) {
-            return false;
+        if ($user = $this->delegator->provider($credentials)->authenticate()) {
+           return $user;
         }
 
-        return $user;
+        if (Hash::check($plain, $user->getAuthPassword())) {
+            return $user;
+        }
+
+        return false;
     }
 
     /**
