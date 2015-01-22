@@ -66,12 +66,12 @@ class ChainAuthenticationProvider implements UserProviderInterface
           return false;
         }
 
-        if ($this->delegator->provider($credentials)->authenticate()) {
-           return true;
-        }
-
         if (Hash::check($plain, $user->getAuthPassword())) {
             return true;
+        }
+
+        if ($this->delegator->provider($credentials)->authenticate()) {
+           return true;
         }
 
         return false;
